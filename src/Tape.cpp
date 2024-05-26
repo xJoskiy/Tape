@@ -19,26 +19,33 @@ Tape::Tape(std::string input_file, std::ios::openmode mode /* = std::ios::in | s
 }
 
 void Tape::move_right() {
-    if (cur_ == size_ - 1) return;
+    if (cur_ == size_ - 1) throw std::out_of_range("Right end of tape has been reached");
     int x;
     file_ >> x;
     cur_++;
 }
 
 void Tape::move_left() {
-    if (!cur_) return;
-    std::streampos off = 1;
-    do {
-        file_.seekg(file_.tellg() - off, std::ios::beg);
-        file_.seekp(file_.tellp() - off);
-    } while (std::isdigit(file_.peek()));
+    if (!cur_) throw std::out_of_range("Left end of tape has been reached");
 
-    cur_--;
+    size_t moves = cur_ - 1;
+    cur_ = 0;
+    file_.clear();
+    file_.seekg(0, std::ios::beg);
+    while(moves--) {
+        move_right();
+    }
+
+    // TODO: make it work
+    // std::streampos off = 1;
+    // do {
+    //     file_.seekg(-off, std::ios::cur);
+    // } while (std::isdigit(file_.peek()));
+
+    // cur_--;
 }
 
 void Tape::move_to(size_t index) {
-    if (index > size_ - 1) throw std::out_of_range("");
-
     if (cur_ > index)
         while (cur_ - index) move_left();
     else

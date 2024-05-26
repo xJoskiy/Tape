@@ -24,7 +24,7 @@ public:
     Tape() = default;
 
     // Create a Tape object from a given file
-    Tape(std::string input_file, std::ios::openmode mode);
+    Tape(std::string input_file, std::ios::openmode mode = std::ios::in | std::ios::out);
 
     void move_right();
     void move_left();
@@ -33,7 +33,9 @@ public:
     int get(size_t index);
     int get();
 
-    void insert(size_t pos, int x) {};
+    size_t cur_pos() {
+        return cur_;
+    }
 
     // Writes only at the end of file
     void write(int x) {
