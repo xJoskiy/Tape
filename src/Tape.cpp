@@ -55,14 +55,15 @@ void Tape::move_to(size_t index) {
 }
 
 int Tape::get(size_t index) {
-    size_t old_pos = cur_;
-    move_to(index);
+    auto old_pos = file_.tellg();
+    auto old_cur = cur_;
 
+    move_to(index);
     int x;
     file_ >> x;
     file_.clear();
-
-    move_to(old_pos);
+    file_.seekg(old_pos, std::ios::beg);
+    cur_ = old_cur;
 
     return x;
 }
@@ -73,6 +74,10 @@ int Tape::get() {
 
 void Tape::write(int x) {
     std::string s = std::to_string(x) + ' ';
+    size_t cur = cur_;
     file_ << s;
     size_++;
+    file_.clear();
+    file_.seekg(0, std::ios::beg);
+    move_to(cur);
 }

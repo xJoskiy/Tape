@@ -2,14 +2,13 @@
 
 #include <fstream>
 #include <ios>
-#include <iostream>
 #include <string>
 #include <vector>
 
 /*
 Class created for simulating a tape via standard file.
 
-Supports following operations: reading from current or given position,
+Supports reading from current or given position,
 moving tape pointer right/left, writing in the end of tape
 */
 
@@ -22,7 +21,7 @@ private:
     void Init();
 
 public:
-    Tape() = default;
+    Tape() : size_(0), cur_(0){};
 
     // Create a Tape object from a given file
     Tape(std::string input_file, std::ios::openmode mode = std::ios::in | std::ios::out);
