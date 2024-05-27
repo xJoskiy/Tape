@@ -7,9 +7,9 @@ std::string input_file = "test_data/input_tape.txt";
 
 TEST(TestTape, TestGetSize) {
     Tape tape(input_file, std::ios::in | std::ios::out);
-    ASSERT_EQ(tape.get_size(), 14);
+    ASSERT_EQ(tape.size(), 14);
 
-    size_t pos = tape.cur_pos();
+    size_t pos = tape.cur();
     ASSERT_EQ(pos, 0);
 }
 
@@ -22,40 +22,45 @@ TEST(TestTape, TestGet) {
 }
 
 TEST(TestTape, TestMoveRight) {
-    Tape tape(input_file, std::ios::in | std::ios::out);
-    while (tape.get() != 13) {
+    Tape tape(input_file);
+
+    int val;
+    while ((val = tape.get()) != 13) {
         tape.move_right();
     }
 
-    size_t pos = tape.cur_pos();
+    size_t pos = tape.cur();
     ASSERT_EQ(pos, 13);
 }
 
 TEST(TestTape, TestMoveLeft) {
-    Tape tape(input_file, std::ios::in | std::ios::out);
+    Tape tape(input_file);
 
-    while (tape.get() != 13) {
+    for (size_t i = 0; i < 20; i++) {
         tape.move_right();
     }
 
-    while (tape.get() != 0) {
+    for (size_t i = 0; i < 20; i++) {
         tape.move_left();
     }
 
-    size_t pos = tape.cur_pos();
+    size_t pos = tape.cur();
+    size_t val = tape.get();
     ASSERT_EQ(pos, 0);
+    ASSERT_EQ(val, 0);
 }
 
 TEST(TestTape, TestMove) {
-    Tape tape(input_file, std::ios::in | std::ios::out);
-    tape.move_to(13);
+    Tape tape(input_file);
+    for (size_t i = 0; i < 20; i++) {
+        tape.move_right();
+    }
 
-    int x = tape.get();
-    size_t pos = tape.cur_pos();
+    tape.move_to(0);
+    size_t pos = tape.cur();
+    size_t val = tape.get();
 
-    ASSERT_EQ(x, 13);
-    ASSERT_EQ(pos, 13);
-    ASSERT_THROW(tape.move_right(), std::out_of_range);
-    ASSERT_THROW(tape.move_to(32), std::out_of_range);
+    ASSERT_EQ(pos, 0);
+    ASSERT_EQ(val, 0);
+    ASSERT_THROW(tape.move_to(20), std::out_of_range);
 }
-

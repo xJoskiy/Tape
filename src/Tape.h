@@ -1,9 +1,4 @@
-/*
-Class created for simulating a tape via standard file.
-
-Supports following operations: reading from current or given position,
-moving tape pointer right/left
-*/
+#pragma once
 
 #include <fstream>
 #include <ios>
@@ -11,11 +6,17 @@ moving tape pointer right/left
 #include <string>
 #include <vector>
 
+/*
+Class created for simulating a tape via standard file.
+
+Supports following operations: reading from current or given position,
+moving tape pointer right/left, writing in the end of tape
+*/
+
 class Tape {
 private:
     size_t size_;
     size_t cur_;
-    size_t max_ram_size_;
     std::fstream file_;
 
     void Init();
@@ -33,17 +34,15 @@ public:
     int get(size_t index);
     int get();
 
-    size_t cur_pos() {
+    // Writes only at the end of file
+    void write(int x);
+
+    // Returns current tape pointer position
+    size_t cur() {
         return cur_;
     }
 
-    // Writes only at the end of file
-    void write(int x) {
-        std::string s = std::to_string(x) + ' ';
-        file_ << s;
-    }
-
-    size_t get_size() const {
+    size_t size() const {
         return size_;
     }
 };
